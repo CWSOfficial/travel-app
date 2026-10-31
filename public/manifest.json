@@ -1,0 +1,32 @@
+{
+  "name": "DheeVoy — Safety-First AI Travel",
+  "short_name": "DheeVoy",
+  "description": "AI-powered travel planning with visa intelligence, real-time safety scores, and the best deals in one click.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#faf8ff",
+  "theme_color": "#faf8ff",
+  "categories": ["travel", "lifestyle"],
+  "icons": [
+    {
+      "src": "https://media.base44.com/images/public/6a1efd8ea4ce97ed07891b4b/d4343598d_generated_image.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://media.base44.com/images/public/6a1efd8ea4ce97ed07891b4b/d4343598d_generated_image.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://media.base44.com/images/public/6a1efd8ea4ce97ed07891b4b/d4343598d_generated_image.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

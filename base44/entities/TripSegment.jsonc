@@ -1,0 +1,208 @@
+{
+  "name": "TripSegment",
+  "description": "An ordered destination segment belonging to one parent Trip (multi-city journeys). sequence_number defines the travel order. A multi-destination Trip has N>=2 segments; single-destination trips do not require segments (backward compatible). itinerary_data stores the AI-generated day-by-day plan for that destination. segment_status reflects lifecycle position relative to trip dates. fulfilment_* fields are additive and nullable \u2014 reserved for future mix-and-match fulfilment (self-planned / affiliate / DMC package / mixed) within one parent journey; they are never auto-assigned today. destination_lat/lng/country_code/mapbox_place_id are additive coordinate fields from the global Mapbox destination search \u2014 nullable so existing TripSegments with only text city/country values continue to work without migration.",
+  "type": "object",
+  "properties": {
+    "trip_id": {
+      "type": "string",
+      "description": "FK to Trip.id \u2014 the parent journey this segment belongs to"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Owner user ID \u2014 mirrors the parent Trip's owner so RLS can resolve access without a join"
+    },
+    "sequence_number": {
+      "type": "number",
+      "description": "Order of this segment in the journey (1 = first destination, 2 = next, etc.)"
+    },
+    "origin_city": {
+      "type": "string",
+      "description": "Where this leg originates from (previous destination or the journey start city)",
+      "nullable": true
+    },
+    "origin_country": {
+      "type": "string",
+      "nullable": true
+    },
+    "destination_city": {
+      "type": "string",
+      "description": "Destination city for this segment"
+    },
+    "destination_country": {
+      "type": "string",
+      "nullable": true
+    },
+    "destination_country_code": {
+      "type": "string",
+      "description": "ISO 3166-1 alpha-2 country code (e.g. AL, GB, JP) from the Mapbox search result. Null for existing segments that predate the global destination search.",
+      "nullable": true
+    },
+    "destination_full": {
+      "type": "string",
+      "description": "Full 'City, Country' label for display",
+      "nullable": true
+    },
+    "destination_lat": {
+      "type": "number",
+      "description": "Latitude from the Mapbox search result \u2014 reused by JourneyMap to place the pin without a second geocoding call. Null for existing segments (resolved lazily via the existing coordinate cache/Nominatim fallback).",
+      "nullable": true
+    },
+    "destination_lng": {
+      "type": "number",
+      "description": "Longitude from the Mapbox search result \u2014 reused by JourneyMap to place the pin without a second geocoding call. Null for existing segments (resolved lazily via the existing coordinate cache/Nominatim fallback).",
+      "nullable": true
+    },
+    "mapbox_place_id": {
+      "type": "string",
+      "description": "Mapbox geocoding feature ID for the destination, useful for future reverse-geocoding or detail lookups. Null for existing segments.",
+      "nullable": true
+    },
+    "arrival_date": {
+      "type": "string",
+      "format": "date",
+      "nullable": true
+    },
+    "departure_date": {
+      "type": "string",
+      "format": "date",
+      "nullable": true
+    },
+    "nights": {
+      "type": "number",
+      "nullable": true
+    },
+    "transport_type": {
+      "type": "string",
+      "enum": [
+        "flight",
+        "train",
+        "bus",
+        "car",
+        "ferry",
+        "other"
+      ],
+      "nullable": true
+    },
+    "transport_notes": {
+      "type": "string",
+      "nullable": true
+    },
+    "accommodation_name": {
+      "type": "string",
+      "nullable": true
+    },
+    "accommodation_address": {
+      "type": "string",
+      "nullable": true
+    },
+    "segment_status": {
+      "type": "string",
+      "enum": [
+        "planned",
+        "upcoming",
+        "active",
+        "completed",
+        "cancelled"
+      ],
+      "default": "planned"
+    },
+    "itinerary_data": {
+      "type": "object",
+      "description": "AI-generated day-by-day plan for this destination (array of day objects under a 'days' key, plus optional journey_overview string). Null until generated.",
+      "nullable": true
+    },
+    "segment_notes": {
+      "type": "string",
+      "nullable": true
+    },
+    "fulfilment_type": {
+      "type": "string",
+      "enum": [
+        "self_planned",
+        "affiliate",
+        "dmc_package",
+        "mixed"
+      ],
+      "nullable": true,
+      "description": "Reserved for future mix-and-match fulfilment. Null for current trips. Never auto-assigned."
+    },
+    "dmc_partner_id": {
+      "type": "string",
+      "nullable": true,
+      "description": "Reserved for future DMC-package fulfilment. FK to DMCProfile.id when a segment is fulfilled via a DMC package. Null for current trips."
+    },
+    "dmc_package_id": {
+      "type": "string",
+      "nullable": true,
+      "description": "Reserved for future DMC-package fulfilment. FK to curated_trips.id when a segment is fulfilled via a DMC package. Null for current trips."
+    },
+    "booking_reference": {
+      "type": "string",
+      "nullable": true,
+      "description": "Reserved for future fulfilment tracking. Null for current trips."
+    },
+    "booking_status": {
+      "type": "string",
+      "nullable": true,
+      "description": "Reserved for future fulfilment tracking (e.g. pending/confirmed/cancelled). Null for current trips."
+    }
+  },
+  "required": [
+    "trip_id",
+    "destination_city",
+    "sequence_number",
+    "segment_status"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,216 @@
+{
+  "name": "Trip",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "User ID who owns this trip \u2014 set by the saveTrip backend function (asServiceRole overrides created_by_id, so this is the reliable owner field)"
+    },
+    "departure_city": {
+      "type": "string"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "duration_days": {
+      "type": "number"
+    },
+    "budget": {
+      "type": "string",
+      "enum": [
+        "budget",
+        "mid_range",
+        "luxury"
+      ]
+    },
+    "travel_style": {
+      "type": "string",
+      "enum": [
+        "beach",
+        "adventure",
+        "cultural",
+        "relaxation",
+        "mixed"
+      ]
+    },
+    "group_type": {
+      "type": "string",
+      "enum": [
+        "solo",
+        "couple",
+        "family",
+        "group"
+      ]
+    },
+    "num_travelers": {
+      "type": "number",
+      "default": 1
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "notification_method": {
+      "type": "string",
+      "enum": [
+        "email",
+        "sms",
+        "both"
+      ]
+    },
+    "selected_destination": {
+      "type": "string"
+    },
+    "destination_details": {
+      "type": "object"
+    },
+    "recommendations": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "promo_codes": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "flight_booking_ref": {
+      "type": "string"
+    },
+    "hotel_booking_ref": {
+      "type": "string"
+    },
+    "total_cost_paid": {
+      "type": "string"
+    },
+    "total_savings": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "planning",
+        "recommended",
+        "selected",
+        "confirmed",
+        "booked"
+      ],
+      "default": "planning"
+    },
+    "trip_type": {
+      "type": "string",
+      "enum": [
+        "self_planned",
+        "curated"
+      ],
+      "default": "self_planned",
+      "description": "Discriminator: 'self_planned' = user planned via the existing AI planner; 'curated' = user selected a DMC-partner curated trip. Unifies both trip types under one record for the Profile 'My Trips' view and future internal analytics."
+    },
+    "journey_type": {
+      "type": "string",
+      "enum": [
+        "single_destination",
+        "multi_destination"
+      ],
+      "default": "single_destination",
+      "description": "Journey shape discriminator (additive, backward compatible). 'single_destination' = the existing one-origin-one-destination flow (default for all existing trips where this field is absent). 'multi_destination' = a connected multi-city / multi-country journey whose ordered legs live in the TripSegment entity keyed by trip_id.",
+      "nullable": true
+    },
+    "journey_pace": {
+      "type": "string",
+      "enum": [
+        "RELAXED",
+        "MODERATE",
+        "BUSY",
+        "VERY BUSY"
+      ],
+      "nullable": true,
+      "description": "Deterministic trip-pace label computed for multi-city journeys (client-side). Null for single-destination trips."
+    },
+    "child_ages": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "nullable": true,
+      "description": "Ages of child travellers captured during multi-city planning (reuses existing traveller inputs). Null/absent when no children."
+    },
+    "curated_trip_id": {
+      "type": "string",
+      "description": "Reference to curated_trips.id when trip_type is 'curated' (null for self_planned)",
+      "nullable": true
+    },
+    "dmc_partner_name": {
+      "type": "string",
+      "description": "DMC partner name for curated trips (null for self_planned)",
+      "nullable": true
+    },
+    "checklist_completion": {
+      "type": "object",
+      "description": "Travel Checklist completion state for this trip \u2014 keys are checklist item ids (visa, safety, weather, esim, insurance, flights_hotels, attractions, pilgrimage), values are booleans. Null/absent means not started.",
+      "nullable": true
+    }
+  },
+  "required": [
+    "departure_city",
+    "start_date",
+    "duration_days"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

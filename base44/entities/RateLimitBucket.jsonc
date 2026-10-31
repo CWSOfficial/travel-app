@@ -1,0 +1,46 @@
+{
+  "name": "RateLimitBucket",
+  "description": "Persistent per-IP rate-limit counters for backend functions, keyed by '<functionName>:<clientIp>'. count + reset_at implement a fixed-window limiter that holds across ALL function instances \u2014 the platform may run multiple parallel instances of a function (cold starts + concurrent traffic), so an in-memory Map would be per-instance and the cap would not apply globally. Service-role only; not user data.",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "description": "Logical key: '<functionName>:<clientIp>'"
+    },
+    "count": {
+      "type": "number",
+      "description": "Requests counted in the current fixed window"
+    },
+    "reset_at": {
+      "type": "number",
+      "description": "Epoch milliseconds when the current window expires and the counter resets"
+    }
+  },
+  "required": [
+    "key",
+    "count",
+    "reset_at"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

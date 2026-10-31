@@ -1,0 +1,70 @@
+{
+  "name": "MetaCapiEventLog",
+  "description": "Server-side dedup log for Meta Conversions API (CAPI) events. One row per send attempt, keyed by dedup_key \u2014 stable 'event_name:user_id' for once-per-user events (Lead, CompleteRegistration) and the unique event_id for discrete actions (ViewContent, Search, Contact). Prevents duplicate conversion events on retry/refresh/revisit. Service-role only; never surfaced to users.",
+  "type": "object",
+  "properties": {
+    "event_name": {
+      "type": "string",
+      "description": "Meta standard or custom event name e.g. Lead, CompleteRegistration, ViewContent, Search, Contact, AffiliateClick"
+    },
+    "event_id": {
+      "type": "string",
+      "description": "Event ID shared with the browser Meta Pixel for pixel/CAPI deduplication"
+    },
+    "dedup_key": {
+      "type": "string",
+      "description": "Logical dedup key \u2014 'event_name:user_id' for once-per-user events, event_id for discrete actions"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "DheeVoy user id if authenticated (null for guests)",
+      "nullable": true
+    },
+    "event_time": {
+      "type": "number",
+      "description": "Unix timestamp (seconds) of the event occurrence"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "sent",
+        "failed"
+      ],
+      "description": "Send status: pending (created before send), sent (Meta accepted), failed (Meta rejected/error)"
+    },
+    "response": {
+      "type": "string",
+      "description": "Safe diagnostic string (never the access token). 'ok' on success, truncated error on failure.",
+      "nullable": true
+    }
+  },
+  "required": [
+    "event_name",
+    "dedup_key",
+    "event_time",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

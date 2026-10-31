@@ -1,0 +1,87 @@
+{
+  "name": "Notification",
+  "description": "In-app notifications for users \u2014 trip saved, trip confirmed, DMC payment confirmed, etc. Created by backend functions (saveTrip, alertDmcPaymentConfirmed). Users can read and mark as read their own notifications.",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "User ID who owns this notification"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "trip_saved",
+        "trip_confirmed",
+        "dmc_payment_confirmed"
+      ],
+      "description": "Type of notification event"
+    },
+    "title": {
+      "type": "string",
+      "description": "Notification title shown in the bell dropdown"
+    },
+    "message": {
+      "type": "string",
+      "description": "Notification body text with real trip details"
+    },
+    "trip_id": {
+      "type": "string",
+      "description": "Related trip ID"
+    },
+    "is_read": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the user has opened/viewed this notification"
+    }
+  },
+  "required": [
+    "user_id",
+    "type",
+    "title",
+    "message",
+    "is_read"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

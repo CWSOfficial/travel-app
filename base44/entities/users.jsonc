@@ -1,0 +1,102 @@
+{
+  "name": "users",
+  "description": "Stores all registered app users. Primary key is UUID. Designed for portability to PostgreSQL/MySQL.",
+  "type": "object",
+  "properties": {
+    "id_uuid": {
+      "type": "string",
+      "description": "Primary key in UUID format"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "User's email address, must be unique"
+    },
+    "full_name": {
+      "type": "string",
+      "description": "User's full name"
+    },
+    "phone_number": {
+      "type": "string",
+      "description": "User's phone number"
+    },
+    "country_code": {
+      "type": "string",
+      "description": "ISO 3166-1 alpha-2 country code, e.g. US, GB"
+    },
+    "profile_photo_url": {
+      "type": "string",
+      "description": "URL to the user's profile photo"
+    },
+    "preferred_currency": {
+      "type": "string",
+      "description": "ISO 4217 currency code, e.g. USD, EUR"
+    },
+    "preferred_language": {
+      "type": "string",
+      "description": "ISO 639-1 language code, e.g. en, fr"
+    },
+    "auth_provider": {
+      "type": "string",
+      "description": "Authentication provider, e.g. email, google, apple"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the user account is active"
+    },
+    "user_created_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the user record was created"
+    },
+    "user_updated_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the user record was last updated"
+    }
+  },
+  "required": [
+    "id_uuid",
+    "email",
+    "full_name",
+    "user_created_date",
+    "user_updated_date"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.id_uuid": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.id_uuid": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

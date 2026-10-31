@@ -1,0 +1,171 @@
+{
+  "name": "CuratedTripBooking",
+  "description": "A customer's booking of a DMC curated trip, tracking direct-to-DMC payment status. dmc_user_id (the DMC partner's user.id) enables RLS so a DMC sees bookings on their own trips; customer_user_id lets the traveller see their own bookings. Status flows: pending_payment \u2192 payment_reported (receipt uploaded) \u2192 confirmed (DMC verified funds). Stores full traveler intake (lead traveler details, group size, passport country) and dynamic pricing (price_per_person, total_amount_payable) captured by the multi-step booking widget.",
+  "type": "object",
+  "properties": {
+    "curated_trip_id": {
+      "type": "string",
+      "description": "FK to curated_trips.id \u2014 the trip being booked"
+    },
+    "dmc_profile_id": {
+      "type": "string",
+      "description": "FK to DMCProfile.id \u2014 the DMC operating this trip",
+      "nullable": true
+    },
+    "dmc_user_id": {
+      "type": "string",
+      "description": "The DMC partner's user.id \u2014 used for RLS so the DMC can view/confirm bookings on their trips",
+      "nullable": true
+    },
+    "dmc_partner_name": {
+      "type": "string",
+      "description": "Denormalised DMC business name",
+      "nullable": true
+    },
+    "trip_title": {
+      "type": "string",
+      "description": "Denormalised curated trip title",
+      "nullable": true
+    },
+    "customer_user_id": {
+      "type": "string",
+      "description": "The traveller's user.id"
+    },
+    "customer_name": {
+      "type": "string",
+      "description": "Traveller's full name (from user account, for backwards compat)",
+      "nullable": true
+    },
+    "customer_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Traveller's email (from user account, for backwards compat)",
+      "nullable": true
+    },
+    "booking_ref_id": {
+      "type": "string",
+      "description": "Unique booking reference ID, auto-generated format: 'DV-' + Year + '-' + 6-char alphanumeric hash e.g. DV-2026-89421A"
+    },
+    "lead_first_name": {
+      "type": "string",
+      "description": "Lead traveler's first name (from booking widget Step B)"
+    },
+    "lead_last_name": {
+      "type": "string",
+      "description": "Lead traveler's last name (from booking widget Step B)"
+    },
+    "lead_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Lead traveler's email (from booking widget Step B)"
+    },
+    "lead_phone": {
+      "type": "string",
+      "description": "Lead traveler's phone number with country code (from booking widget Step B)"
+    },
+    "passport_country": {
+      "type": "string",
+      "description": "Lead traveler's passport country / nationality (from booking widget Step B)"
+    },
+    "adult_count": {
+      "type": "number",
+      "description": "Number of adult travelers (min 1, from booking widget Step A)",
+      "default": 1
+    },
+    "child_count": {
+      "type": "number",
+      "description": "Number of child travelers (default 0, from booking widget Step A)",
+      "default": 0
+    },
+    "total_travelers": {
+      "type": "number",
+      "description": "Calculated total: adult_count + child_count"
+    },
+    "price_per_person": {
+      "type": "number",
+      "description": "Numeric price per person at booking time (copied from curated_trips.price_per_person)"
+    },
+    "total_amount_payable": {
+      "type": "number",
+      "description": "Calculated total: price_per_person * total_travelers"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending_payment",
+        "payment_reported",
+        "confirmed",
+        "cancelled"
+      ],
+      "default": "pending_payment",
+      "description": "Payment status: pending_payment \u2192 payment_reported (traveller uploaded receipt) \u2192 confirmed (DMC verified funds)"
+    },
+    "receipt_url": {
+      "type": "string",
+      "description": "Uploaded payment receipt/screenshot URL (via UploadFile integration)",
+      "nullable": true
+    },
+    "amount": {
+      "type": "string",
+      "description": "Human-readable amount paid (legacy field, kept for backwards compat)",
+      "nullable": true
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional notes from the traveller",
+      "nullable": true
+    }
+  },
+  "required": [
+    "curated_trip_id",
+    "customer_user_id",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "data.customer_user_id": "{{user.id}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "data.customer_user_id": "{{user.id}}"
+        },
+        {
+          "data.dmc_user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.customer_user_id": "{{user.id}}"
+        },
+        {
+          "data.dmc_user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.customer_user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

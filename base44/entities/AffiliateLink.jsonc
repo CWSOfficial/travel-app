@@ -1,0 +1,75 @@
+{
+  "name": "AffiliateLink",
+  "type": "object",
+  "properties": {
+    "partner_name": {
+      "type": "string",
+      "description": "Partner name e.g. Expedia, Skyscanner, Booking.com"
+    },
+    "affiliate_link": {
+      "type": "string",
+      "description": "The affiliate URL for this partner"
+    },
+    "network": {
+      "type": "string",
+      "description": "Affiliate network e.g. Partnerize, Travelpayouts, CJ"
+    },
+    "commission_rate": {
+      "type": "string",
+      "description": "Commission rate e.g. up to 12%"
+    },
+    "cookie_window_days": {
+      "type": "number",
+      "description": "Cookie attribution window in days"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "paused",
+        "pending"
+      ],
+      "default": "pending",
+      "description": "Current status of this affiliate link"
+    },
+    "last_tested": {
+      "type": "string",
+      "format": "date",
+      "description": "Date this link was last tested"
+    }
+  },
+  "required": [
+    "partner_name",
+    "affiliate_link",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.status": "active"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

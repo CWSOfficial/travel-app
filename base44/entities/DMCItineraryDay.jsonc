@@ -1,0 +1,89 @@
+{
+  "name": "DMCItineraryDay",
+  "description": "One row per day in a DMC-submitted trip's itinerary, linked to DMCSubmission by submission_id. DMCs add as many days as needed via the dynamic '+ Add Next Day' repeater.",
+  "type": "object",
+  "properties": {
+    "submission_id": {
+      "type": "string",
+      "description": "Foreign key to DMCSubmission.id \u2014 the trip this day belongs to"
+    },
+    "day_number": {
+      "type": "number",
+      "description": "Day sequence number (1, 2, 3\u2026)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Short title for the day e.g. 'Arrival & Old City Walk'",
+      "nullable": true
+    },
+    "morning_activity": {
+      "type": "string",
+      "description": "Morning activity description",
+      "nullable": true
+    },
+    "midday_activity": {
+      "type": "string",
+      "description": "Midday activity description",
+      "nullable": true
+    },
+    "evening_activity": {
+      "type": "string",
+      "description": "Evening activity description",
+      "nullable": true
+    },
+    "accommodation_name": {
+      "type": "string",
+      "description": "Hotel / accommodation name for that night",
+      "nullable": true
+    }
+  },
+  "required": [
+    "submission_id",
+    "day_number"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "dmc_partner"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

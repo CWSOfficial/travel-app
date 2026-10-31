@@ -1,0 +1,243 @@
+{
+  "name": "AiSessionLog",
+  "description": "Logs completed conversational AI flow sessions (eSIM, Travel Insurance, Attractions, Weather, Safety, Visa Check, Flights & Hotels, Pilgrimage & Cultural Tours) and outbound partner-referral clicks for engagement, conversion and partner-attribution analytics. Non-blocking \u2014 never surfaced to users. Guests may also create entries (public app).",
+  "type": "object",
+  "properties": {
+    "flow_type": {
+      "type": "string",
+      "enum": [
+        "esim",
+        "insurance",
+        "attractions",
+        "weather",
+        "safety",
+        "visa",
+        "flights",
+        "hotels",
+        "pilgrimage_tours",
+        "partner_referral_out"
+      ],
+      "description": "Which conversational flow produced this session, or 'partner_referral_out' for an outbound partner-referral click"
+    },
+    "partner_id": {
+      "type": "string",
+      "description": "Inbound attribution partner id captured from the ?partner_id= URL param on app load (null if none). Also reused on partner_referral_out rows to cross-reference the originating source partner.",
+      "nullable": true
+    },
+    "guest_claim_hash": {
+      "type": "string",
+      "description": "SHA-256 hash of the browser's guest claim token, set when a guest creates an AiSessionLog. Used by linkGuestReports to verify that the same browser created the orphan record \u2014 prevents cross-user report planting via email-match alone. Null for legacy records created before this field existed; those are NOT auto-linked.",
+      "nullable": true
+    },
+    "branch_taken": {
+      "type": "string",
+      "enum": [
+        "tours",
+        "things_to_do",
+        "car_rental"
+      ],
+      "description": "Which Attractions branch the user took (attractions flow only)",
+      "nullable": true
+    },
+    "destination": {
+      "type": "string",
+      "description": "Destination entered by the user; for partner_referral_out rows this is the destination partner name"
+    },
+    "trip_length_days": {
+      "type": "number",
+      "description": "Trip length in days (eSIM, weather, visa flows)"
+    },
+    "trip_length_label": {
+      "type": "string",
+      "description": "Selected trip-length chip label (weather/visa flows), or computed 'N days' string for visa when both dates given",
+      "nullable": true
+    },
+    "trip_cost": {
+      "type": "string",
+      "description": "Trip cost range selected (insurance flow)"
+    },
+    "traveler_count": {
+      "type": "number",
+      "description": "Number of travelers (insurance, flights, hotels flows)"
+    },
+    "adventure_activities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Selected high-risk activities (insurance flow)"
+    },
+    "data_plan": {
+      "type": "string",
+      "description": "Recommended/selected data plan (eSIM flow)"
+    },
+    "travel_time": {
+      "type": "string",
+      "description": "Selected travel-time window chip (weather flow)",
+      "nullable": true
+    },
+    "weather_activities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Selected planned activities (weather flow)"
+    },
+    "weather_mode": {
+      "type": "string",
+      "description": "Whether real weather data was shown as forecast or historical/typical (weather flow)",
+      "nullable": true
+    },
+    "weather_high_c": {
+      "type": "number",
+      "description": "Real high temperature in Celsius shown to the user from the weather integration (weather flow)",
+      "nullable": true
+    },
+    "weather_low_c": {
+      "type": "number",
+      "description": "Real low temperature in Celsius shown to the user from the weather integration (weather flow)",
+      "nullable": true
+    },
+    "safety_score": {
+      "type": "number",
+      "description": "Real safety index score (0-100) shown to the user from DestinationSafetyCache (safety flow)",
+      "nullable": true
+    },
+    "safety_score_country": {
+      "type": "string",
+      "description": "Country name the displayed safety score belongs to (safety flow)",
+      "nullable": true
+    },
+    "traveler_type": {
+      "type": "string",
+      "description": "Who is traveling (safety flow)",
+      "nullable": true
+    },
+    "safety_concern": {
+      "type": "string",
+      "description": "Main safety concern selected (safety flow)",
+      "nullable": true
+    },
+    "passport_nationality": {
+      "type": "string",
+      "description": "Passport country held by the traveler (visa flow)",
+      "nullable": true
+    },
+    "departure_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Departure date if provided (visa flow). Null if flexible.",
+      "nullable": true
+    },
+    "return_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Return date if provided (visa flow). Null if flexible or only a trip-length chip was chosen.",
+      "nullable": true
+    },
+    "purpose_of_trip": {
+      "type": "string",
+      "description": "Primary purpose of the trip (visa flow)",
+      "nullable": true
+    },
+    "entry_status": {
+      "type": "string",
+      "description": "AI-suggested likely entry status (visa flow)",
+      "nullable": true
+    },
+    "passport_validity_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Computed passport validity cutoff date (visa flow)",
+      "nullable": true
+    },
+    "days_until_trip": {
+      "type": "number",
+      "description": "Computed days from today until departure (visa flow). Null if no departure date.",
+      "nullable": true
+    },
+    "flow_context": {
+      "type": "object",
+      "description": "Structured per-flow context for the flights, hotels and pilgrimage_tours flows \u2014 e.g. origin/dates/trip-type, nights/priorities, or experience-type/group/timing/notes. Stored verbatim as trip-planning context only; never used to infer personal characteristics about the user.",
+      "nullable": true
+    },
+    "recommendation_shown": {
+      "type": "string",
+      "description": "The AI recommendation blurb shown to the user; for partner_referral_out rows this is the tracked outbound URL"
+    },
+    "cta_clicked": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the user clicked the flow's CTA / saved their report"
+    },
+    "user_profile_created": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether a contact profile (name + email) was captured for this session (attractions flow)"
+    },
+    "contact_name": {
+      "type": "string",
+      "description": "Name captured via the post-recommendation contact / auth-gate step (null until submitted)",
+      "nullable": true
+    },
+    "contact_email": {
+      "type": "string",
+      "description": "Email captured via the post-recommendation contact / auth-gate step (null until submitted)",
+      "nullable": true
+    },
+    "guardrail_triggered": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the render-level guardrail validation had to fall back to a safe default for this session (schema failure or flagged fabricated-number pattern)"
+    },
+    "guardrail_reason": {
+      "type": "string",
+      "description": "Why the guardrail fired e.g. 'schema_validation_failed', 'flagged_pattern:dollar_or_percent', 'flagged_pattern:religious_bias'. null/absent when not triggered.",
+      "nullable": true
+    }
+  },
+  "required": [
+    "flow_type",
+    "destination",
+    "cta_clicked"
+  ],
+  "rls": {
+    "create": null,
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

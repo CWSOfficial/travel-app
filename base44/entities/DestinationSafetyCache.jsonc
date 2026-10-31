@@ -1,0 +1,67 @@
+{
+  "name": "DestinationSafetyCache",
+  "description": "24-hour TTL cache for country-level visa and safety data sourced from government travel advisory APIs. country_code is the logical primary key for lookups. Public read access lets anonymous visitors view cached data; only authenticated users trigger live API calls.",
+  "type": "object",
+  "properties": {
+    "country_code": {
+      "type": "string",
+      "description": "ISO 3166-1 alpha-2 country code \u2014 logical primary key for lookups"
+    },
+    "country_name": {
+      "type": "string",
+      "description": "Full country name"
+    },
+    "region": {
+      "type": "string",
+      "description": "Geographic region e.g. Europe, Asia, Africa"
+    },
+    "visa_status": {
+      "type": "string",
+      "description": "Visa requirement summary e.g. visa-free, visa-on-arrival, e-visa required, visa required"
+    },
+    "visa_free_days": {
+      "type": "number",
+      "description": "Number of visa-free days allowed (0 if visa required)"
+    },
+    "safety_index_score": {
+      "type": "number",
+      "description": "Calculated safety score on a scale of 1-100 (100 = safest)"
+    },
+    "dynamic_advisories": {
+      "type": "object",
+      "description": "Structured JSON object containing raw advisory data from government sources"
+    },
+    "critical_advisories_text": {
+      "type": "string",
+      "description": "Human-readable summary of critical advisories for the unstructured_text schema field"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO timestamp of when this cache entry was last refreshed"
+    }
+  },
+  "required": [
+    "country_code",
+    "safety_index_score",
+    "last_updated"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

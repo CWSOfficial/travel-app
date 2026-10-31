@@ -1,0 +1,100 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "description": "The role of the user in the app \u2014 'admin' (full access), 'user' (consumer traveller), or 'dmc_partner' (DMC portal access only)",
+      "enum": [
+        "admin",
+        "user",
+        "dmc_partner"
+      ]
+    },
+    "disclaimer_acknowledged": {
+      "type": "boolean",
+      "description": "Whether the user has acknowledged the AI disclaimer modal on first launch",
+      "default": false
+    },
+    "premium_subscriber": {
+      "type": "boolean",
+      "description": "Whether the user has an active premium subscription",
+      "default": false
+    },
+    "subscription_start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the premium subscription started"
+    },
+    "subscription_plan": {
+      "type": "string",
+      "enum": [
+        "monthly",
+        "annual"
+      ],
+      "description": "The billing plan \u2014 monthly or annual"
+    },
+    "subscription_status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "cancelled",
+        "expired",
+        "trialling"
+      ],
+      "description": "Current subscription status"
+    },
+    "stripe_customer_id": {
+      "type": "string",
+      "description": "Stripe customer ID \u2014 stored at checkout completion for portal/refund operations"
+    },
+    "stripe_subscription_id": {
+      "type": "string",
+      "description": "Stripe subscription ID \u2014 stored at checkout completion for cancellation/refund operations"
+    },
+    "promo_banner_dismissed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO timestamp of when the user last dismissed the promo banner"
+    },
+    "referral_code": {
+      "type": "string",
+      "description": "Unique referral code for this user"
+    },
+    "travel_credits": {
+      "type": "number",
+      "description": "Travel credits balance",
+      "default": 0
+    },
+    "referred_by_code": {
+      "type": "string",
+      "description": "Referral code used during signup \u2014 set once, never changed"
+    },
+    "referral_credit_claimed": {
+      "type": "boolean",
+      "description": "Whether this user has already received a referral signup bonus",
+      "default": false
+    },
+    "wishlist_tooltip_shown": {
+      "type": "boolean",
+      "description": "Whether the wishlist onboarding tooltip has been shown to the user",
+      "default": false
+    },
+    "phone_number": {
+      "type": "string",
+      "description": "User's phone number for profile contact"
+    },
+    "preferred_currency": {
+      "type": "string",
+      "description": "ISO 4217 currency code \u2014 user's selected display currency (GBP, USD, EUR)"
+    },
+    "notification_email_enabled": {
+      "type": "boolean",
+      "description": "Whether the user wants to receive trip alert emails",
+      "default": true
+    }
+  },
+  "required": [
+    "role"
+  ]
+}

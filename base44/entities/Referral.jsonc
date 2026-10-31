@@ -1,0 +1,75 @@
+{
+  "name": "Referral",
+  "type": "object",
+  "properties": {
+    "referrer_id": {
+      "type": "string",
+      "description": "User ID of the person who shared the referral code"
+    },
+    "referred_id": {
+      "type": "string",
+      "description": "User ID of the new user who used the code"
+    },
+    "referral_code": {
+      "type": "string",
+      "description": "The referral code that was used"
+    },
+    "credits_awarded": {
+      "type": "number",
+      "description": "Credits awarded to both parties when the referral completes the 30-day Premium window",
+      "default": 100
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "completed",
+        "pending",
+        "failed"
+      ],
+      "default": "pending",
+      "description": "Status of the referral: pending (code applied, awaiting 30-day Premium window), completed (credits awarded), failed (subscription cancelled before 30 days)"
+    },
+    "referred_subscription_start": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the referred user's Premium subscription started \u2014 set by the daily processPendingReferrals job when it detects the subscription. Used by the UI to show days remaining in the 30-day window."
+    }
+  },
+  "required": [
+    "referrer_id",
+    "referred_id",
+    "referral_code"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.referrer_id": "{{user.id}}"
+        },
+        {
+          "data.referred_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

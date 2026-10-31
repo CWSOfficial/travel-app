@@ -1,0 +1,62 @@
+{
+  "name": "WeatherCache",
+  "description": "Short-lived cache (30-min TTL) for weather API responses keyed by city + travel date, to avoid redundant API calls. Public read access lets anonymous visitors view cached data; only authenticated users trigger live API calls.",
+  "type": "object",
+  "properties": {
+    "city": {
+      "type": "string",
+      "description": "Destination city name (lowercased for consistent lookups)"
+    },
+    "travel_date": {
+      "type": "string",
+      "format": "date",
+      "description": "The travel date the forecast was requested for"
+    },
+    "temperature": {
+      "type": "number",
+      "description": "Temperature in Celsius"
+    },
+    "severe_weather_alerts": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "description": "Array of active severe weather alert objects from the weather API"
+    },
+    "is_outdoor_safe": {
+      "type": "boolean",
+      "description": "Whether outdoor activities are considered safe based on alerts and conditions"
+    },
+    "raw_response": {
+      "type": "object",
+      "description": "Full raw API response stored for debugging and future field extraction"
+    },
+    "last_fetched": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO timestamp of when this cache entry was created/updated"
+    }
+  },
+  "required": [
+    "city",
+    "last_fetched"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

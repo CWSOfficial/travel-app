@@ -1,0 +1,131 @@
+{
+  "name": "DMCProfile",
+  "description": "One-per-DMC partner profile holding business + banking details, stored once so individual trip submissions stay lean. Created by the authenticated DMC user; admins can review and verify.",
+  "type": "object",
+  "properties": {
+    "business_name": {
+      "type": "string",
+      "description": "Registered business / DMC company name"
+    },
+    "contact_name": {
+      "type": "string",
+      "description": "Primary contact person's full name"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Primary contact email"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Primary contact phone number"
+    },
+    "country_region": {
+      "type": "string",
+      "description": "Country or region the DMC operates from"
+    },
+    "bank_name": {
+      "type": "string",
+      "description": "Bank name for payouts",
+      "nullable": true
+    },
+    "account_number": {
+      "type": "string",
+      "description": "Bank account number for payouts",
+      "nullable": true
+    },
+    "swift_ifsc": {
+      "type": "string",
+      "description": "SWIFT code (international) or IFSC code (India) for the bank account",
+      "nullable": true
+    },
+    "upi_id": {
+      "type": "string",
+      "description": "UPI ID for India-based payouts (optional alternative to bank transfer)",
+      "nullable": true
+    },
+    "revolut_payment_link": {
+      "type": "string",
+      "description": "Revolut payment link for direct customer-to-DMC payments",
+      "nullable": true
+    },
+    "paypal_me_link": {
+      "type": "string",
+      "description": "PayPal.me link for direct customer-to-DMC payments",
+      "nullable": true
+    },
+    "emergency_contact": {
+      "type": "string",
+      "description": "Emergency contact name + phone for the DMC",
+      "nullable": true
+    },
+    "verification_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "verified",
+        "rejected"
+      ],
+      "default": "pending",
+      "description": "Admin verification state of this DMC profile"
+    },
+    "verification_notes": {
+      "type": "string",
+      "description": "Admin notes on verification (null until reviewed)",
+      "nullable": true
+    }
+  },
+  "required": [
+    "business_name",
+    "contact_name",
+    "email",
+    "phone",
+    "country_region",
+    "verification_status"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "dmc_partner"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

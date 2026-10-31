@@ -1,0 +1,84 @@
+{
+  "name": "AffiliateLinkClick",
+  "type": "object",
+  "properties": {
+    "partner_name": {
+      "type": "string",
+      "description": "Partner name e.g. Expedia (Flights), Aviasales, Hotel.com"
+    },
+    "affiliate_link_id": {
+      "type": "string",
+      "description": "Foreign key to AffiliateLink.id"
+    },
+    "pillar": {
+      "type": "string",
+      "enum": [
+        "PLAN",
+        "PREPARE",
+        "NEARBY",
+        "general"
+      ],
+      "description": "Which DheeVoy pillar generated the click",
+      "nullable": true
+    },
+    "partner_id": {
+      "type": "string",
+      "description": "Inbound attribution partner id (from ?partner_id= URL param) captured at click time for cross-referencing downstream conversions",
+      "nullable": true
+    },
+    "context": {
+      "type": "string",
+      "enum": [
+        "flight",
+        "hotel",
+        "general"
+      ],
+      "description": "What the user was booking when they clicked"
+    },
+    "page": {
+      "type": "string",
+      "description": "Which page/component the click came from e.g. FlightHotelPicker, BookingDetails"
+    },
+    "destination": {
+      "type": "string",
+      "description": "Trip destination at time of click"
+    },
+    "clicked_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO timestamp of the click"
+    }
+  },
+  "required": [
+    "partner_name",
+    "context",
+    "clicked_at"
+  ],
+  "rls": {
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "name": "curated_trips",
+  "description": "DMC-partner curated trip packages. Content is authored by admins/DMC partners and published to the public listing. Inclusions, exclusions, cancellation policy, group-size bounds, numeric price and operator email are copied from the DMCSubmission + DMCProfile at publish time.",
+  "type": "object",
+  "properties": {
+    "destination": {
+      "type": "string",
+      "description": "Trip destination e.g. 'Kyoto, Japan'"
+    },
+    "dmc_partner_name": {
+      "type": "string",
+      "description": "Name of the Destination Management Company partner operating this trip"
+    },
+    "dmc_contact_info": {
+      "type": "string",
+      "description": "Contact details for the DMC partner (email/phone/website)"
+    },
+    "dmc_profile_id": {
+      "type": "string",
+      "description": "FK to DMCProfile.id \u2014 links this curated trip to its DMC partner so the customer checkout can resolve direct payment links (Revolut/PayPal/bank). Null until an admin assigns it.",
+      "nullable": true
+    },
+    "trip_title": {
+      "type": "string",
+      "description": "Display title for the curated trip e.g. '7-Day Kyoto Cultural Immersion'"
+    },
+    "days": {
+      "type": "number",
+      "description": "Number of days in the curated trip package"
+    },
+    "dfy_or_dwy": {
+      "type": "string",
+      "enum": [
+        "dfy",
+        "dwy"
+      ],
+      "description": "Service model: 'dfy' = Done For You (fully managed), 'dwy' = Done With You (guided collaboration)"
+    },
+    "itinerary_days": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "included": {
+            "type": "boolean"
+          }
+        }
+      },
+      "description": "Day-by-day itinerary outline owned by the DMC partner"
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of photo URLs for the trip gallery"
+    },
+    "price_display": {
+      "type": "string",
+      "description": "Human-readable price string e.g. 'From $1,499 per person'"
+    },
+    "price_per_person": {
+      "type": "number",
+      "description": "Numeric price per person used by the booking widget for real-time total calculation. Copied from DMCSubmission at publish time.",
+      "nullable": true
+    },
+    "currency": {
+      "type": "string",
+      "description": "ISO 4217 currency code for the price e.g. USD, INR, EUR. Copied from DMCSubmission at publish time.",
+      "nullable": true,
+      "default": "USD"
+    },
+    "min_group_size": {
+      "type": "number",
+      "description": "Minimum number of travellers required to run the trip. Copied from DMCSubmission at publish time.",
+      "nullable": true
+    },
+    "max_group_size": {
+      "type": "number",
+      "description": "Maximum number of travellers allowed. Copied from DMCSubmission at publish time.",
+      "nullable": true
+    },
+    "operator_email": {
+      "type": "string",
+      "description": "DMC operator contact email used for automated booking email dispatch. Copied from DMCProfile.email at publish time.",
+      "nullable": true
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Trip tags e.g. ['cultural', 'small-group', 'all-inclusive']"
+    },
+    "operator_badge_text": {
+      "type": "string",
+      "description": "Verified operator badge text e.g. 'Verified DMC Partner' or 'ATOL Protected'"
+    },
+    "booking_link_or_contact": {
+      "type": "string",
+      "description": "Booking URL or contact instruction for the DMC partner"
+    },
+    "inclusions": {
+      "type": "string",
+      "description": "What's included in the price (bullet-style text, one per line) \u2014 copied from DMCSubmission at publish time",
+      "nullable": true
+    },
+    "exclusions": {
+      "type": "string",
+      "description": "What's NOT included in the price (bullet-style text, one per line) \u2014 copied from DMCSubmission at publish time",
+      "nullable": true
+    },
+    "cancellation_policy": {
+      "type": "string",
+      "description": "Free-text cancellation policy \u2014 copied from DMCSubmission at publish time",
+      "nullable": true
+    },
+    "published": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this curated trip is visible to users in the browse screen"
+    }
+  },
+  "required": [
+    "destination",
+    "dmc_partner_name",
+    "trip_title",
+    "days",
+    "dfy_or_dwy",
+    "published"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "$or": [
+        {
+          "data.published": true
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

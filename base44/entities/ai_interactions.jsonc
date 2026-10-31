@@ -1,0 +1,116 @@
+{
+  "name": "ai_interactions",
+  "description": "Logs every AI interaction for analytics, model fine-tuning, and audit. session_id groups multi-turn conversations. Never stores PII beyond user_id reference.",
+  "type": "object",
+  "properties": {
+    "id_uuid": {
+      "type": "string",
+      "description": "Primary key in UUID format"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Foreign key referencing users.id"
+    },
+    "trip_id": {
+      "type": "string",
+      "description": "Foreign key referencing trips.id, if interaction was trip-specific"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Groups multiple turns belonging to one conversation session"
+    },
+    "interaction_type": {
+      "type": "string",
+      "enum": [
+        "itinerary_generation",
+        "recommendation",
+        "chat",
+        "search",
+        "summary"
+      ],
+      "description": "Category of AI interaction"
+    },
+    "user_prompt": {
+      "type": "string",
+      "description": "The prompt or question submitted by the user"
+    },
+    "ai_response": {
+      "type": "string",
+      "description": "The response returned by the AI model"
+    },
+    "model_used": {
+      "type": "string",
+      "description": "AI model identifier, e.g. claude-sonnet-4-6"
+    },
+    "tokens_used": {
+      "type": "number",
+      "description": "Total tokens consumed by this interaction"
+    },
+    "response_time_ms": {
+      "type": "number",
+      "description": "Time in milliseconds for the AI to return a response"
+    },
+    "user_rating": {
+      "type": "number",
+      "description": "User satisfaction rating from 1 to 5 stars"
+    },
+    "user_feedback": {
+      "type": "string",
+      "description": "Optional free-text feedback from the user about the AI response"
+    },
+    "interaction_created_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the interaction was recorded"
+    }
+  },
+  "required": [
+    "id_uuid",
+    "user_id",
+    "interaction_type",
+    "user_prompt",
+    "ai_response",
+    "interaction_created_date"
+  ],
+  "rls": {
+    "create": {
+      "data.user_id": "{{user.id}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

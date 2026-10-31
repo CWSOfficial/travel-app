@@ -1,0 +1,200 @@
+{
+  "name": "DMCSubmission",
+  "description": "A DMC-submitted curated trip package awaiting admin review. Linked to the DMC's profile. Separate from the end-user Trip entity so the existing trip-planner flow is untouched. Day-by-day detail lives in DMCItineraryDay rows keyed by submission_id.",
+  "type": "object",
+  "properties": {
+    "dmc_profile_id": {
+      "type": "string",
+      "description": "Foreign key to DMCProfile.id \u2014 the DMC that submitted this trip"
+    },
+    "dmc_partner_name": {
+      "type": "string",
+      "description": "Denormalised DMC business name at submission time for fast display"
+    },
+    "trip_name": {
+      "type": "string",
+      "description": "Display title of the curated trip e.g. '7-Day Kyoto Cultural Immersion'"
+    },
+    "destinations": {
+      "type": "string",
+      "description": "Trip destination(s) e.g. 'Kyoto, Japan'"
+    },
+    "duration_days": {
+      "type": "number",
+      "description": "Number of days in the trip package"
+    },
+    "duration_nights": {
+      "type": "number",
+      "description": "Number of nights in the trip package",
+      "nullable": true
+    },
+    "departure_cities": {
+      "type": "string",
+      "description": "Departure city/cities the trip starts from",
+      "nullable": true
+    },
+    "theme": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "Adventure",
+          "Family",
+          "Wildlife",
+          "Heritage",
+          "Cultural",
+          "Beach",
+          "Honeymoon",
+          "Religious",
+          "Luxury",
+          "Offbeat"
+        ]
+      },
+      "description": "Multi-select trip themes for standardised filtering"
+    },
+    "languages_spoken": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "English",
+          "Hindi",
+          "Spanish",
+          "French",
+          "German",
+          "Arabic",
+          "Mandarin",
+          "Japanese",
+          "Portuguese",
+          "Italian",
+          "Russian",
+          "Thai"
+        ]
+      },
+      "description": "Languages spoken by the DMC's guides on this trip",
+      "nullable": true
+    },
+    "min_group_size": {
+      "type": "number",
+      "description": "Minimum number of travellers required to run the trip",
+      "nullable": true
+    },
+    "max_group_size": {
+      "type": "number",
+      "description": "Maximum number of travellers allowed",
+      "nullable": true
+    },
+    "inclusions": {
+      "type": "string",
+      "description": "What's included in the price (bullet-style text, one per line)",
+      "nullable": true
+    },
+    "exclusions": {
+      "type": "string",
+      "description": "What's NOT included in the price (bullet-style text, one per line)",
+      "nullable": true
+    },
+    "price_per_person": {
+      "type": "number",
+      "description": "Price per person in the DMC's currency (minor units not used \u2014 store face value)"
+    },
+    "currency": {
+      "type": "string",
+      "description": "ISO 4217 currency code for the price e.g. USD, INR, EUR",
+      "default": "USD"
+    },
+    "group_pricing": {
+      "type": "string",
+      "description": "Free-text group pricing notes e.g. 'Group of 6+: 10% off'",
+      "nullable": true
+    },
+    "advance_deposit_percent": {
+      "type": "number",
+      "description": "Advance deposit required as a percentage of total price",
+      "nullable": true
+    },
+    "cancellation_policy": {
+      "type": "string",
+      "description": "Free-text cancellation policy",
+      "nullable": true
+    },
+    "photo_gallery": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of uploaded photo URLs (stored via UploadFile integration)",
+      "nullable": true
+    },
+    "listing_status": {
+      "type": "string",
+      "enum": [
+        "pending_review",
+        "approved",
+        "rejected",
+        "published"
+      ],
+      "default": "pending_review",
+      "description": "Admin review state \u2014 'pending_review' on submit, 'approved' then 'published' to show on the main site"
+    },
+    "admin_notes": {
+      "type": "string",
+      "description": "Internal admin notes during review (not shown to DMC)",
+      "nullable": true
+    }
+  },
+  "required": [
+    "dmc_profile_id",
+    "trip_name",
+    "destinations",
+    "duration_days",
+    "theme",
+    "price_per_person",
+    "listing_status"
+  ],
+  "rls": {
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "dmc_partner"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "name": "DestinationSearchGap",
+  "description": "Logs destination searches that returned zero results so admins can identify and add missing destinations.",
+  "type": "object",
+  "properties": {
+    "search_term": {
+      "type": "string",
+      "description": "The search term entered by the user"
+    },
+    "search_count": {
+      "type": "number",
+      "description": "Number of times this term was searched with no results",
+      "default": 1
+    },
+    "first_searched": {
+      "type": "string",
+      "format": "date",
+      "description": "Date this term was first searched"
+    },
+    "last_searched": {
+      "type": "string",
+      "format": "date",
+      "description": "Date this term was most recently searched"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "missing",
+        "added",
+        "reviewing"
+      ],
+      "default": "missing"
+    }
+  },
+  "required": [
+    "search_term",
+    "search_count",
+    "first_searched",
+    "last_searched",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

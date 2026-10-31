@@ -1,0 +1,223 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@400;500;600;700;800;900&family=Dancing+Script:wght@400;500;600;700&family=Lilita+One:wght@400&family=Great+Vibes:wght@400&family=Monoton:wght@400&family=Pacifico:wght@400&family=Permanent+Marker:wght@400&family=Righteous:wght@400&family=Titan+One:wght@400&family=Urbanist:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+    /* DheeVoy marketing palette: lavender canvas, navy text, blue actions. */
+    --background: 252 100% 99%;          /* #faf8ff */
+    --foreground: 222 72% 14%;           /* #102149 */
+    --card: 0 0% 100%;                   /* #ffffff */
+    --card-foreground: 222 72% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 72% 14%;
+    --primary: 207 92% 43%;              /* #0878d1 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 203 100% 96%;            /* #eaf7ff */
+    --secondary-foreground: 222 72% 14%;
+    --muted: 240 100% 97%;                /* #f2f3ff */
+    --muted-foreground: 216 19% 47%;      /* #617084 */
+    --accent: 203 100% 96%;
+    --accent-foreground: 207 92% 43%;
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 216 28% 92%;               /* #e4e9f2 */
+    --input: 216 28% 92%;
+    --ring: 207 92% 43%;
+    --chart-1: 207 92% 43%;
+    --chart-2: 210 80% 60%;
+    --chart-3: 280 65% 65%;
+    --chart-4: 43 96% 60%;
+    --chart-5: 340 75% 60%;
+    --radius: 0.75rem;
+    /* ── Curated trip page light theme (always light, regardless of app theme) ── */
+    --curated-bg: 0 0% 100%;
+    --curated-surface: 210 40% 98%;
+    --curated-card: 0 0% 100%;
+    --curated-heading: 222 47% 11%;
+    --curated-text: 215 25% 27%;
+    --curated-muted: 215 16% 47%;
+    --curated-border: 214 32% 91%;
+    --curated-accent: 207 92% 43%;
+    --curated-accent-fg: 0 0% 100%;
+    --font-heading: 'Inter', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-display: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --sidebar-background: 252 100% 99%;
+    --sidebar-foreground: 222 72% 14%;
+    --sidebar-primary: 207 92% 43%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 203 100% 96%;
+    --sidebar-accent-foreground: 222 72% 14%;
+    --sidebar-border: 216 28% 92%;
+    --sidebar-ring: 207 92% 43%;
+  }
+
+  .dark {
+    --background: 252 100% 99%;
+    --foreground: 222 72% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 72% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 72% 14%;
+    --primary: 207 92% 43%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 203 100% 96%;
+    --secondary-foreground: 222 72% 14%;
+    --muted: 240 100% 97%;
+    --muted-foreground: 216 19% 47%;
+    --accent: 203 100% 96%;
+    --accent-foreground: 207 92% 43%;
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 207 15% 21%;
+    --input: 207 15% 21%;
+    --ring: 207 92% 43%;
+    --chart-1: 207 92% 43%;
+    --chart-2: 210 80% 60%;
+    --chart-3: 280 65% 65%;
+    --chart-4: 43 96% 60%;
+    --chart-5: 340 75% 60%;
+    --sidebar-background: 252 100% 99%;
+    --sidebar-foreground: 222 72% 14%;
+    --sidebar-primary: 207 92% 43%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 203 100% 96%;
+    --sidebar-accent-foreground: 222 72% 14%;
+    --sidebar-border: 216 28% 92%;
+    --sidebar-ring: 207 92% 43%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body;
+    background-image:
+      radial-gradient(ellipse 60% 40% at 0% 0%, hsl(207 92% 43% / 0.05), transparent 70%),
+      radial-gradient(ellipse 60% 40% at 100% 100%, hsl(174 78% 40% / 0.04), transparent 70%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.025em;
+  }
+}
+
+.attractions-chat-scroll {
+  max-height: 65vh;
+}
+
+/* Desktop typography follows the supplied HTML screens; mobile typography stays as-is. */
+@media (min-width: 1024px) {
+  :root {
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
+    --font-display: 'Montserrat', sans-serif;
+  }
+
+  .attractions-chat-scroll {
+    max-height: min(76vh, 820px);
+  }
+}
+
+/* Brand actions use DheeVoy blue; other utility colors keep their normal light values. */
+@layer utilities {
+  .bg-black { background-color: hsl(var(--primary)); }
+  .hover\:bg-black:hover { background-color: hsl(207 92% 38%); }
+  .hover\:bg-black\/80:hover { background-color: hsl(207 92% 38%); }
+  .border-black { border-color: hsl(var(--primary)); }
+  .text-black { color: hsl(var(--foreground)); }
+  .ring-black { --tw-ring-color: hsl(var(--primary)); }
+  .teal-surface { background-color: hsl(174 78% 40%); color: #fff; }
+  [style*="background"][style*="00E5CC" i],
+  [style*="background"][style*="rgb(0, 229, 204)"],
+  [style*="background"][style*="rgb(0,229,204)"] { color: #071a40; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   CURATED TRIP PAGE — light-theme utilities
+   Defined here (not via tailwind.config.js) so they render even when
+   the Tailwind watcher hasn't reloaded the config. Use the --curated-*
+   tokens declared in :root above.
+   ════════════════════════════════════════════════════════════════ */
+@layer utilities {
+  .bg-curated-bg { background-color: hsl(var(--curated-bg)); }
+  .bg-curated-surface { background-color: hsl(var(--curated-surface)); }
+  .bg-curated-card { background-color: hsl(var(--curated-card)); }
+  .bg-curated-heading { background-color: hsl(var(--curated-heading)); }
+  .bg-curated-accent { background-color: hsl(var(--curated-accent)); }
+  .bg-curated-accent-fg { background-color: hsl(var(--curated-accent-fg)); }
+  .text-curated-heading { color: hsl(var(--curated-heading)); }
+  .text-curated-text { color: hsl(var(--curated-text)); }
+  .text-curated-muted { color: hsl(var(--curated-muted)); }
+  .text-curated-accent { color: hsl(var(--curated-accent)); }
+  .text-curated-accent-fg { color: hsl(var(--curated-accent-fg)); }
+  .border-curated-border { border-color: hsl(var(--curated-border)); }
+  .border-curated-accent { border-color: hsl(var(--curated-accent)); }
+
+  .bg-curated-accent\/10 { background-color: hsl(var(--curated-accent) / 0.10); }
+  .bg-curated-accent\/15 { background-color: hsl(var(--curated-accent) / 0.15); }
+  .bg-curated-accent\/20 { background-color: hsl(var(--curated-accent) / 0.20); }
+  .border-curated-accent\/30 { border-color: hsl(var(--curated-accent) / 0.30); }
+  .border-curated-accent\/40 { border-color: hsl(var(--curated-accent) / 0.40); }
+
+  .hover\:border-curated-accent\/40:hover { border-color: hsl(var(--curated-accent) / 0.40); }
+  .hover\:border-curated-accent:hover { border-color: hsl(var(--curated-accent)); }
+  .hover\:bg-curated-surface:hover { background-color: hsl(var(--curated-surface)); }
+  .hover\:text-curated-heading:hover { color: hsl(var(--curated-heading)); }
+  .focus\:border-curated-accent:focus { border-color: hsl(var(--curated-accent)); }
+  .placeholder\:text-curated-muted::placeholder { color: hsl(var(--curated-muted)); }
+}
+
+/* Map surfaces and controls follow the DheeVoy light palette. */
+.dark-map-tiles { filter: none; }
+.leaflet-container { background: #f2f3ff; font-family: inherit; }
+.leaflet-control-zoom a { background: #fff !important; color: #102149 !important; border-color: #e4e9f2 !important; }
+.leaflet-control-zoom a:hover { background: #eaf7ff !important; }
+.leaflet-control-attribution { background: rgba(255,255,255,.9) !important; color: #617084 !important; }
+.leaflet-control-attribution a { color: #0878d1 !important; }
+.leaflet-tooltip { background: rgba(255,255,255,.97) !important; color: #102149 !important; border: 1px solid rgba(8,120,209,.24) !important; border-radius: 6px !important; box-shadow: 0 2px 8px rgba(7,26,64,.14) !important; }
+
+/* Multi-City workspace: retain its dark mobile styling, use the site’s light
+   palette for the larger desktop canvas and journey results. */
+@media (min-width: 1024px) {
+  .multicity-content .text-white { color: #102149 !important; }
+  .multicity-content [class*="text-white/"] { color: #617084 !important; }
+  .multicity-content .text-slate-200,
+  .multicity-content .text-slate-300 { color: #3d4f70 !important; }
+  .multicity-content .text-slate-400,
+  .multicity-content .text-slate-500 { color: #617084 !important; }
+  .multicity-content .text-teal-300,
+  .multicity-content .text-teal-400 { color: #0878d1 !important; }
+  .multicity-content .text-amber-300 { color: #9a5a08 !important; }
+  .multicity-content [class*="bg-white/5"],
+  .multicity-content [class*="bg-white/[0.05]"],
+  .multicity-content [class*="bg-white/[0.06]"] { background-color: #fff !important; }
+  .multicity-content [class*="border-white/10"],
+  .multicity-content [class*="border-white/15"] { border-color: #e1e9f2 !important; }
+  .multicity-content [class*="bg-teal-500/5"],
+  .multicity-content [class*="bg-teal-500/10"],
+  .multicity-content [class*="bg-teal-500/20"] { background-color: #eaf7ff !important; }
+  .multicity-content [class*="border-teal-500/"] { border-color: #b9ddf5 !important; }
+  .multicity-content [class*="from-teal-400"][class*="to-cyan-500"] {
+    background-image: linear-gradient(100deg, #0878d1, #35c8ed) !important;
+    box-shadow: 0 12px 28px rgba(8, 120, 209, .2);
+  }
+  .multicity-content input[class*="bg-white/5"] {
+    background-color: #f8faff !important;
+    color: #102149 !important;
+    border-color: #dbe4ef !important;
+    color-scheme: light;
+  }
+}

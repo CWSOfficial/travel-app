@@ -1,0 +1,63 @@
+{
+  "name": "DestinationImageCache",
+  "description": "Reusable image cache for destination + activity images so the Multi-City Journey Engine (and future features) never performs redundant external/AI image lookups for the same destination+keyword combination. normalized_keyword is 'any' for a generic destination hero image. Public read so anonymous visitors benefit from cached images; only admins/service-role write.",
+  "type": "object",
+  "properties": {
+    "destination_city": {
+      "type": "string",
+      "description": "Lowercased destination city name e.g. 'paris', 'venice'"
+    },
+    "destination_country": {
+      "type": "string",
+      "nullable": true,
+      "description": "Lowercased destination country name e.g. 'france'"
+    },
+    "normalized_keyword": {
+      "type": "string",
+      "description": "Lowercased activity/landmark keyword (e.g. 'eiffel', 'canal', 'museum') or 'any' for a generic destination hero image"
+    },
+    "activity_theme": {
+      "type": "string",
+      "nullable": true,
+      "description": "Broad activity theme bucket (e.g. 'landmark', 'food', 'transport', 'nature') for future fuzzy matching"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "The reusable image URL (Unsplash or other provider)"
+    },
+    "image_source": {
+      "type": "string",
+      "description": "Where the image was sourced from e.g. 'unsplash', 'static_map', 'ai_generated'"
+    },
+    "last_validated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO timestamp of when this cache entry was last validated/refreshed"
+    }
+  },
+  "required": [
+    "destination_city",
+    "normalized_keyword",
+    "image_url",
+    "image_source",
+    "last_validated_at"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

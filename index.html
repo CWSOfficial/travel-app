@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="https://base44.com/logo_v2.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#faf8ff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="DheeVoy" />
+    <link rel="apple-touch-icon" href="https://base44.com/logo_v2.svg" />
+    <title>DheeVoy — Safety-First AI Travel</title>
+  <meta name="description" content="DheeVoy — AI-powered travel planning with visa intelligence, real-time safety scores, and the best deals in one click." />
+    <!-- Google Analytics 4 (GA4) — single gtag.js load, dual data streams -->
+    <!-- Primary stream: G-2KNLT6YYSK (shared with landing page, cross-subdomain) -->
+    <!-- App-only stream: G-6XL6XLR386 (isolates app.dheevoy.com events) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2KNLT6YYSK"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-2KNLT6YYSK');
+      gtag('config', 'G-6XL6XLR386');
+    </script>
+    <!-- PostHog Analytics: initialized via posthog-js package in src/main.jsx -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

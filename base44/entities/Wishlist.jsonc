@@ -1,0 +1,107 @@
+{
+  "name": "Wishlist",
+  "description": "Stores each user's wishlisted destinations. Linked to users table via user_id. Only visible to the logged-in user who created it.",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "Foreign key referencing users.id"
+    },
+    "destination_name": {
+      "type": "string",
+      "description": "e.g. Santorini, Greece"
+    },
+    "destination_country": {
+      "type": "string"
+    },
+    "destination_city": {
+      "type": "string"
+    },
+    "destination_image_url": {
+      "type": "string"
+    },
+    "destination_lat": {
+      "type": "number"
+    },
+    "destination_lng": {
+      "type": "number"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "dream",
+        "planning_soon",
+        "next_trip"
+      ]
+    },
+    "estimated_travel_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "added_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "saved",
+        "planned",
+        "visited"
+      ],
+      "default": "saved"
+    }
+  },
+  "required": [
+    "user_id",
+    "destination_name",
+    "destination_country",
+    "destination_city",
+    "added_date",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "data.user_id": "{{user.id}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

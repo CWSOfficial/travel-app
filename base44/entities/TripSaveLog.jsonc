@@ -1,0 +1,41 @@
+{
+  "name": "TripSaveLog",
+  "description": "Tracks each trip creation event for monthly free-tier limit enforcement (3 trips/month). Entries are admin-only and never deleted by users, so the count persists even if the corresponding Trip record is deleted \u2014 deleting a trip does NOT free up a slot.",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string",
+      "description": "User ID who created the trip"
+    },
+    "month_key": {
+      "type": "string",
+      "description": "YYYY-MM calendar month key derived from server UTC timestamp at creation time"
+    }
+  },
+  "required": [
+    "user_id",
+    "month_key"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
