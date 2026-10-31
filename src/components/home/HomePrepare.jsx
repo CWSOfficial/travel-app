@@ -57,12 +57,13 @@ export default function HomePrepare() {
 
   return (
     <section
-      className="relative max-w-7xl mx-auto px-4 pt-6 pb-2 sm:px-6 lg:px-8 lg:pt-0 lg:overflow-x-clip"
+      className="relative max-w-7xl mx-auto px-4 pt-6 pb-2 sm:px-6 lg:px-8 lg:pt-0"
     >
       {/* Desktop uses the same cinematic video hero as the marketing website.
           Keep the compact app home layout below unchanged on mobile. */}
       <div
         className="relative left-1/2 mb-12 hidden min-h-[min(800px,calc(100svh-80px))] w-screen -translate-x-1/2 overflow-hidden bg-[#173c4a] text-center text-white lg:flex lg:items-center lg:justify-center"
+        style={{ width: "100vw" }}
       >
         <video
           ref={heroVideoRef}

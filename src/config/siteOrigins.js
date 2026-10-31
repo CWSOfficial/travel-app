@@ -1,8 +1,8 @@
-const local = import.meta.env.DEV;
 export const siteOrigins = Object.freeze({
-  marketing: local ? "http://localhost:5175" : "https://dheevoy.com",
-  travel: local ? "http://localhost:5176" : "https://app.dheevoy.com",
+  marketing: "https://travel-frontend-nine-mu.vercel.app",
+  travel: "https://travel-frontend-app-henna.vercel.app",
 });
+
 export function siteUrl(site, path = "/") {
   const origin = siteOrigins[site];
   if (!origin) throw new Error(`Unknown DheeVoy site: ${site}`);

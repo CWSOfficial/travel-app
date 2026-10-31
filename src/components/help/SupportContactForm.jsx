@@ -124,7 +124,7 @@ export default function SupportContactForm({ user }) {
       <div className="border-t px-5 py-4 bg-slate-50 space-y-2">
         <p className="text-xs font-semibold text-muted-foreground">Or reach us directly</p>
         <p className="text-sm">📧 <a href="mailto:support@dheevoy.com" className="font-medium text-foreground underline">support@dheevoy.com</a></p>
-        <p className="text-sm">🌐 <a href="https://dheevoy.com/support" target="_blank" rel="noopener noreferrer" className="font-medium text-foreground underline">dheevoy.com/support</a></p>
+        <p className="text-sm">🌐 <a href="https://travel-frontend-nine-mu.vercel.app/support" target="_blank" rel="noopener noreferrer" className="font-medium text-foreground underline">Open DheeVoy marketing support ↗</a></p>
         <p className="text-xs text-muted-foreground">Response time: Within 24 hours (Mon–Fri, 9am–6pm GMT)</p>
         <div className="pt-2">
           <p className="text-xs text-muted-foreground mb-2">Also find us on:</p>
