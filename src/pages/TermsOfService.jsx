@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, FileText } from "lucide-react";
-import { useCurrency } from "@/lib/useCurrency";
 
 const LAST_UPDATED = "10 June 2026";
 const EMAIL = "legal@dheevoy.com";
 
 export default function TermsOfService() {
-  const { sym, monthlyPrice, yearlyPrice, currency } = useCurrency();
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl border-b border-border/60 shadow-sm px-4 py-3 flex items-center gap-3">
@@ -37,14 +35,8 @@ export default function TermsOfService() {
           <p>AI-generated recommendations, visa requirements, safety ratings, and cost estimates are provided for informational purposes. They may be inaccurate, outdated, or incomplete. You must independently verify all travel information including visa requirements, entry conditions, and safety advisories with official government sources before travelling.</p>
         </Section>
 
-        <Section title="4. Subscriptions & Payments">
-          <ul>
-            <li>Free and Premium plans are available. Premium is billed monthly ({sym}{monthlyPrice}/mo, {currency.code}) or annually ({sym}{yearlyPrice}/yr, 20% discount). Your card is charged at signup with a 14-day money-back guarantee — cancel within 14 days for a full refund. Prices are shown in your local currency.</li>
-            <li>All payments are processed by Stripe. We do not store payment card details.</li>
-            <li>Subscriptions renew automatically unless cancelled at least 24 hours before the renewal date.</li>
-            <li>Refunds: We offer a 14-day cooling-off period for EU/UK consumers under the Consumer Rights Directive. After 14 days, subscriptions are non-refundable except where required by law.</li>
-            <li>Prices may change with 30 days' notice. Continued use after the effective date constitutes acceptance.</li>
-          </ul>
+        <Section title="4. Payments & Subscriptions">
+          <p>DheeVoy does not currently offer paid traveller subscriptions or process subscription payments through this app.</p>
         </Section>
 
         <Section title="5. Acceptable Use">

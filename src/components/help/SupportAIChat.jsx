@@ -5,8 +5,6 @@ import { Send, Loader2 } from "lucide-react";
 const SUGGESTED = [
   "How do I create an itinerary?",
   "How does visa intelligence work?",
-  "How do I upgrade to Premium?",
-  "How do I cancel my subscription?",
   "How do I contact support?",
 ];
 
@@ -28,7 +26,7 @@ TONE & FORMATTING:
 
 export default function SupportAIChat({ user }) {
   const [messages, setMessages] = useState([
-    { role: "assistant", content: "👋 Hi! I'm DheeVoy's support assistant. Ask me anything about the app — itineraries, visa info, subscriptions, and more!" }
+    { role: "assistant", content: "👋 Hi! I'm DheeVoy's support assistant. Ask me anything about the app — itineraries, visa info, safety and more!" }
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
