@@ -4,7 +4,7 @@ import Navbar from "@/components/travel/Navbar";
 import BottomNav from "@/components/travel/BottomNav";
 import { Link } from "react-router-dom";
 import { getGuestClaimToken } from "@/lib/guestClaimToken";
-import { Loader2, FileText, Cloud, Shield, Plane, Smartphone, Umbrella, Ticket, ChevronDown, Trash2, BedDouble, Landmark } from "lucide-react";
+import { Loader2, FileText, Cloud, Shield, Plane, Smartphone, Umbrella, Ticket, ChevronDown, Trash2, BedDouble, Landmark, ArrowLeft, Compass } from "lucide-react";
 
 const FLOW_META = {
   weather: { icon: Cloud, label: "Weather", color: "text-sky-300", ring: "border-sky-500/30" },
@@ -68,7 +68,7 @@ export default function SavedReports() {
       setIsAdmin(u?.role === "admin");
       // Link previously-anonymous logs captured with this email to this account.
       if (u?.email) {
-        try { await base44.functions.invoke("linkGuestReports", { claim_token: getGuestClaimToken() }); } catch (e) {}
+        try { await base44.functions.invoke("linkGuestReports", { claim_token: getGuestClaimToken() }); } catch {}
       }
       const rows = await base44.entities.AiSessionLog.filter({ cta_clicked: true }, "-created_date", 100);
       setLogs(rows);
@@ -80,7 +80,14 @@ export default function SavedReports() {
       <Navbar />
       <div className="max-w-2xl mx-auto px-4 pt-6 lg:max-w-7xl lg:px-8 lg:pt-12">
         <header className="mb-5 lg:mb-8 lg:rounded-[30px] lg:border lg:border-[#dfe8f3] lg:bg-[linear-gradient(115deg,#ffffff_0%,#f1f8ff_68%,#e9f7fa_100%)] lg:px-9 lg:py-8 lg:shadow-[0_18px_46px_rgba(16,33,73,0.07)]">
-          <Link to="/profile" className="text-xs text-white/50 hover:text-white inline-flex items-center gap-1 mb-2 lg:mb-3 lg:text-[#617084] lg:hover:text-[#0878d1]">‹ Back to Profile</Link>
+          <nav aria-label="Saved reports navigation" className="mb-4 flex flex-wrap gap-2 lg:mb-5">
+            <Link to="/" className="inline-flex items-center gap-1.5 rounded-full border border-sky-300/50 bg-sky-500/15 px-3 py-1.5 text-xs font-semibold text-sky-100 hover:bg-sky-500/25 lg:border-[#0878d1] lg:bg-[#0878d1] lg:text-white lg:hover:bg-[#0669bb]">
+              <Compass className="h-3.5 w-3.5" /> Discover Home
+            </Link>
+            <Link to="/profile" className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1.5 text-xs text-white/75 hover:bg-white/10 lg:border-[#dce8f6] lg:text-[#3d4f70] lg:hover:bg-white">
+              <ArrowLeft className="h-3.5 w-3.5" /> Back to Profile
+            </Link>
+          </nav>
           <p className="hidden lg:block mb-2 text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#0878d1]">Your DheeVoy activity</p>
           <h1 className="font-display text-2xl font-bold text-white lg:text-[38px] lg:leading-tight lg:tracking-[-0.04em] lg:text-[#071a40]">Saved Reports</h1>
           <p className="text-xs text-white/50 lg:mt-2 lg:text-sm lg:text-[#617084]">Your saved weather, safety & visa reports from DheeVoy AI flows.</p>
