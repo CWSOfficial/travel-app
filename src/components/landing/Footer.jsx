@@ -1,6 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { Globe2, DollarSign, Plane, MessagesSquare, Send } from "lucide-react";
+import { Globe2, DollarSign } from "lucide-react";
+import SocialLinksRow from "@/components/landing/SocialLinksRow";
 import { siteUrl } from "@/config/siteOrigins";
 
 // Same footer content and grouping as the 5175 marketing site. App links use
@@ -46,7 +46,6 @@ const nearbySupport = [
   { label: "Attractions & Tours", href: appPath("attractions") },
   { label: "Help Center", href: marketingPath("/support") },
   { label: "About DheeVoy", href: marketingPath("/about") },
-  { label: "Premium Membership", href: marketingPath("/premium") },
 ];
 
 function Col({ title, items }) {
@@ -70,24 +69,19 @@ export default function Footer() {
       <div className="mx-auto w-full max-w-[1280px] px-5 sm:px-8 lg:px-10">
         <div className="mb-4 grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4 lg:grid-cols-[minmax(0,2.15fr)_repeat(4,minmax(0,1fr))] lg:gap-x-10">
           <div className="col-span-2 sm:col-span-4 lg:col-span-1">
-            <Link to="/" aria-label="DheeVoy home" className="inline-flex items-center">
+            <a href={marketingPath("/")} aria-label="Open DheeVoy marketing home" className="inline-flex items-center">
               <img
                 src="/design/home/assets/dheevoy-logo.png"
                 alt="DheeVoy"
                 className="h-[90px] w-[107px] object-contain object-left"
                 loading="lazy"
               />
-            </Link>
+            </a>
             <p className="mt-4 font-body text-[15px] font-medium text-[#3d4f70]">Plan Smarter. Travel Safer. Go Further.</p>
             <p className="mt-4 max-w-xs font-body text-sm leading-relaxed text-[#3d4f70]">
               Algorithmic intelligence blended with modern sensory luxury for seamless global discovery and curated expeditions.
             </p>
-            <div className="mt-5 flex items-center gap-3">
-              <a href={marketingPath("/about")} aria-label="About our global journeys" className="flex h-9 w-9 items-center justify-center rounded-full border border-[#e4e9f2] bg-white text-[#3d4f70] transition-colors hover:bg-[#eaf7ff] hover:text-[#0878d1]"><Globe2 size={16} /></a>
-              <Link to="/plan" aria-label="Plan a journey" className="flex h-9 w-9 items-center justify-center rounded-full border border-[#e4e9f2] bg-white text-[#3d4f70] transition-colors hover:bg-[#eaf7ff] hover:text-[#0878d1]"><Plane size={16} /></Link>
-              <a href={marketingPath("/support")} aria-label="Help and support" className="flex h-9 w-9 items-center justify-center rounded-full border border-[#e4e9f2] bg-white text-[#3d4f70] transition-colors hover:bg-[#eaf7ff] hover:text-[#0878d1]"><MessagesSquare size={16} /></a>
-              <a href={`${siteUrl("marketing", "/")}#how-it-works`} aria-label="See how DheeVoy works" className="flex h-9 w-9 items-center justify-center rounded-full border border-[#e4e9f2] bg-white text-[#3d4f70] transition-colors hover:bg-[#eaf7ff] hover:text-[#0878d1]"><Send size={16} /></a>
-            </div>
+            <div className="mt-5"><SocialLinksRow /></div>
           </div>
           <Col title="Explore" items={explore} />
           <Col title="Plan" items={plan} />

@@ -5,6 +5,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Keep a single calendar icon in the hotel date fields; the input remains a native date picker. */
+.hotel-date-input::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
 @layer base {
   :root {
     color-scheme: light;

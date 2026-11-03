@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import {
-  User, Shield, Bell,
+  User, Shield, Bell, ArrowLeft,
   ChevronRight, LogOut, Globe, FileText,
   HelpCircle, Search, Briefcase
 } from "lucide-react";
@@ -35,8 +35,11 @@ export default function Profile() {
   return (
     <div className="min-h-screen bg-slate-50 pb-16 lg:pb-0">
       {/* Header */}
-      <div className="bg-black text-white px-4 pt-14 pb-8">
+      <div className="bg-black text-white px-4 pt-6 pb-8">
         <div className="max-w-lg mx-auto">
+          <Link to="/" aria-label="Back to home" title="Back to Home" className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-white/90 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+            <ArrowLeft className="h-5 w-5" aria-hidden="true" />
+          </Link>
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-black">
               {user?.full_name?.charAt(0)?.toUpperCase() || "U"}

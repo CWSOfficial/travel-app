@@ -5,8 +5,7 @@
  * TRACKING NETWORKS:
  * - Expedia:  Partnerize (PHG) — expanded tracking params from short link
  *             https://expedia.com/affiliates/expedia-home.8hD3CIF
- * - Hotels.com: Partnerize (PHG) — short link with ?destination= deep-link override
- *             https://www.hotels.com/affiliate/dpXZF4i
+ * - Hotels.com: direct search URL (the previous short-link override did not preserve search criteria)
  * - Booking.com: Commission Junction (CJ) — click link with ?url= deep-link override
  *             https://www.dpbolvw.net/click-101812508-15734754
  *
@@ -27,12 +26,6 @@ const EXPEDIA_TRACKING_PARAMS = {
   afflid: '1100lDbMvvrU',
   affdtl: 'PHG.1100lDbMvvrU.VPUxenLAiW',
 };
-
-// ── Hotels.com Partnerize short link ──
-// Deep-link format: append ?destination={encoded_url} to the short link.
-// The short link sets Partnerize tracking cookies, then redirects to the
-// destination URL (the Hotels.com search page with pre-filled query).
-const HOTELS_COM_SHORT_LINK = 'https://www.hotels.com/affiliate/dpXZF4i';
 
 // ── Booking.com CJ (Commission Junction) tracking ──
 // PID=101812508, AID=15734754
@@ -58,13 +51,16 @@ export function buildExpediaHotelSearchUrl(destination, startDate, endDate, adul
   return `${base}&${expediaTrackingString()}`;
 }
 
-/**
- * Build a tracked Hotels.com hotel search URL with destination, dates, and adults pre-filled.
- * Uses the Partnerize short link with ?destination= deep-link override.
- */
+/** Build a direct Hotels.com search URL with the user's destination and dates. */
 export function buildHotelsComSearchUrl(destination, startDate, endDate, adults = 1) {
-  const searchUrl = `https://www.hotels.com/Hotel-Search?destination=${encodeURIComponent(destination)}&startDate=${startDate}&endDate=${endDate}&adults=${adults}`;
-  return `${HOTELS_COM_SHORT_LINK}?destination=${encodeURIComponent(searchUrl)}`;
+  const params = new URLSearchParams({
+    destination: String(destination || '').trim(),
+    startDate: startDate || '',
+    endDate: endDate || '',
+    adults: String(Math.max(1, Number(adults) || 1)),
+    rooms: '1',
+  });
+  return `https://www.hotels.com/Hotel-Search?${params.toString()}`;
 }
 
 /**
@@ -77,7 +73,7 @@ export function buildBookingComSearchUrl(destination, startDate, endDate, adults
   const params = new URLSearchParams({ ss: destination });
   if (checkIn) params.set('checkin', checkIn);
   if (checkOut) params.set('checkout', checkOut);
-  if (adults > 1) params.set('group_adults', String(adults));
+  params.set('group_adults', String(Math.max(1, Number(adults) || 1)));
   const searchUrl = `https://www.booking.com/searchresults.html?${params.toString()}`;
   return `${BOOKING_CJ_CLICK_URL}?url=${encodeURIComponent(searchUrl)}`;
 }
@@ -94,13 +90,12 @@ export function buildExpediaPropertyUrl(propertyName, destination) {
 }
 
 /**
- * Build a tracked Hotels.com search URL for a specific property name + destination.
- * Uses the Partnerize short link with ?destination= deep-link override.
+ * Build a Hotels.com search URL for a specific property name + destination.
+ * No affiliate deep-link is configured for this property flow.
  */
 export function buildHotelsComPropertyUrl(propertyName, destination) {
   const query = `${propertyName}, ${destination}`;
-  const searchUrl = `https://www.hotels.com/Hotel-Search?destination=${encodeURIComponent(query)}`;
-  return `${HOTELS_COM_SHORT_LINK}?destination=${encodeURIComponent(searchUrl)}`;
+  return buildHotelsComSearchUrl(query);
 }
 
 /**
